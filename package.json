@@ -1,0 +1,22 @@
+{
+  "name": "typescript-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "cache": "ts-node src/promise-based-cache/index.ts",
+    "retry": "ts-node src/retry-mechanism/index.ts",
+    "dev-retry": "ts-node-dev --respawn src/retry-mechanism/index.ts",
+    "dev-cache": "ts-node-dev --respawn src/promise-based-cache/index.ts",
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
