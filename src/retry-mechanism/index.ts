@@ -70,4 +70,3 @@ async function fetchData(): Promise<string> {
     console.error("Failed after retries:", err);
   }
 })();
-
