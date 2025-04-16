@@ -6,11 +6,15 @@ interface CacheItem<T> {
 export class PromiseCache<K, V> {
   private cache: Map<K, CacheItem<Promise<V>>>;
   private defaultTtl: number;
-  private cleanupInterval: number | null = null;
+  private cleanupInterval: NodeJS.Timeout;
 
-  constructor(defaultTtl = 60000) {
+  constructor(defaultTtl = 60000, cleanupIntervalMs = 60000) {
     this.cache = new Map();
     this.defaultTtl = defaultTtl;
+
+    this.cleanupInterval = setInterval(() => {
+      this.cleanExpired();
+    }, cleanupIntervalMs);
   }
 
   async get(key: K, fetchFn: () => Promise<V>, ttl?: number): Promise<V> {
@@ -22,7 +26,6 @@ export class PromiseCache<K, V> {
     }
 
     const promise = fetchFn();
-
     const expiry = now + (ttl ?? this.defaultTtl);
     this.cache.set(key, { value: promise, expiry });
 
@@ -67,21 +70,8 @@ export class PromiseCache<K, V> {
     return count;
   }
 
-  startAutoCleanup(interval = 60000): void {
-    if (this.cleanupInterval) {
-      clearInterval(this.cleanupInterval);
-    }
-
-    this.cleanupInterval = setInterval(() => {
-      this.cleanExpired();
-    }, interval) as unknown as number;
-  }
-
-  // Stop automatic cleanup
-  stopAutoCleanup(): void {
-    if (this.cleanupInterval !== null) {
-      clearInterval(this.cleanupInterval);
-      this.cleanupInterval = null;
-    }
+  // Optional: allow manual cleanup stop if needed
+  dispose(): void {
+    clearInterval(this.cleanupInterval);
   }
 }

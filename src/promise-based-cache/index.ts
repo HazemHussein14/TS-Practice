@@ -61,13 +61,9 @@ async function main() {
     const cleanedItemsCount =
       objectCache.cleanExpired() + objectsListCache.cleanExpired();
     console.log(`\nCleaned ${cleanedItemsCount} expired items from caches`);
-
-    // Stop auto-cleanup when done
-    objectCache.stopAutoCleanup();
-    objectsListCache.stopAutoCleanup();
   } catch (error) {
     console.error("Error in main:", error);
   }
 }
 
-main()
+main();
